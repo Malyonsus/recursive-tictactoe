@@ -2,6 +2,8 @@
  * Okay, look. I know this code is terrible. The reason the board_state variables are so crazy
  * is for AI work in the future, but I probably won't even do that in JS, so!
  * Anyway, shut up.
+ *
+ * Hey, why didn't I use svg for this?
  */
 var board_xmodel = 0
 var board_ymodel = 0
