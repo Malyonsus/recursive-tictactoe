@@ -99,6 +99,9 @@ calculate_edges = function( width, height ) {
 	y_cuts[7] = y_cuts[6] + ( big_width / 2 ) + little_third
 	y_cuts[8] = height - gutter - little_third
 	y_cuts[9] = height - gutter
+	
+	console.log(x_cuts);
+	console.log(y_cuts);
 }
 
 clear_overlay = function() {
@@ -155,10 +158,16 @@ draw_board = function() {
 var xTurn = true;
 
 click_handler = function( event ) {
+
+	target = event.target || e.srcElement;
+	rect = target.getBoundingClientRect();
+	offsetX = event.clientX - rect.left;
+	offsetY = event.clientY - rect.top;
+
 	// figure out which box.
 	x = 8
 	for( i = 1;i < 9;i++ ) {
-		if(x_cuts[i] > event.clientX) {
+		if(x_cuts[i] > offsetX) {
 			x = i - 1
 			break
 		}
@@ -166,7 +175,7 @@ click_handler = function( event ) {
 	
 	y = 8
 	for( i = 1;i < 9;i++ ) {
-		if(y_cuts[i] > event.clientY) {
+		if(y_cuts[i] > offsetY) {
 			y = i - 1
 			break
 		}
