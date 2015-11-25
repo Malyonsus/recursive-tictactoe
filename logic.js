@@ -41,11 +41,12 @@ initialize = function() {
 	overlay = document.getElementById("overlay")
 	meta = document.getElementById("meta")
 
-	window.addEventListener('resize', resizeBoard, false)
+	window.addEventListener('resize', resize, false)
 
 	resizeBoard()
 	reset_game()
-	redraw()
+	redraw_board()
+	redraw_state()
 }
 
 reset_game = function() {
@@ -59,13 +60,17 @@ reset_game = function() {
 	master_board_o = new Array(9)
 }
 
-redraw = function() {
+redraw_board = function() {
 	clear_overlay()
 	clear_meta()
 	draw_board()
 }
 
-resizeBoard = function() {
+redraw_state = function() {
+
+}
+
+resize = function() {
 	best_height = window.innerHeight
 	best_width = window.innerWidth
 	size = Math.min(best_height, best_width) - 15
@@ -76,7 +81,8 @@ resizeBoard = function() {
 	overlay.height = size
 	meta.height = size
 	meta.width = size
-	redraw()
+	redraw_board()
+	redraw_state()
 }
 
 calculate_edges = function( width, height ) {
