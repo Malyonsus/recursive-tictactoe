@@ -5,13 +5,13 @@
  *
  * Hey, why didn't I use svg for this?
  */
-var board_xmodel = 0
-var board_ymodel = 0
+var board_xmodel = 0 // unused
+var board_ymodel = 0 // unused
 
 // Graphical
-var board_view
-var overlay
-var meta
+var board_view // the board with marks
+var overlay // the 'which square to play in'
+var meta // the 3x3 'supergrid'f
 var gutter = 4
 var small_gutter = 0
 var big_width = 5
@@ -25,13 +25,13 @@ var y_cuts = []
 
 // Logical
 var moves = []
-var board_state_all = new Array(81)
-var board_state_x = new Array(81)
-var board_state_o = new Array(81)
+var board_state_all = new Array(81) // true if mark in square
+var board_state_x = new Array(81) // true if x in square
+var board_state_o = new Array(81) // true of o in square
 
-var master_board_all = new Array(9)
-var master_board_x = new Array(9)
-var master_board_o = new Array(9)
+var master_board_all = new Array(9) // true if a square in 'supergrid' completed
+var master_board_x = new Array(9) // true if x won a 'supergrid'
+var master_board_o = new Array(9) // true of o won a 'supergrid'
 
 // Initialize the whole thing. Reset the logicals, draw the whole board.
 initialize = function() {
@@ -60,12 +60,14 @@ reset_game = function() {
 	master_board_o = new Array(9)
 }
 
+// Clear the overlays, redraw the board grid.
 redraw_board = function() {
 	clear_overlay()
 	clear_meta()
 	draw_board()
 }
 
+// Redraw the x's, o's, and meta-grid
 redraw_state = function() {
 
 }
@@ -85,6 +87,7 @@ resize = function() {
 	redraw_state()
 }
 
+// Populate the variables that store the bounding boxes for the grids
 calculate_edges = function( width, height ) {
 
 	// take the whole canvas, subtract the gutters, divide by three,
@@ -136,6 +139,7 @@ calculate_edges = function( width, height ) {
 	console.log(y_cuts);
 }
 
+// Clear the board that shows where to move next
 clear_overlay = function() {
 	context = overlay.getContext("2d")
 	context.beginPath()
@@ -144,6 +148,7 @@ clear_overlay = function() {
 	context.closePath()
 }
 
+// Clear the board that marks suprgrid squares
 clear_meta = function() {
 	context = meta.getContext("2d")
 	context.beginPath()
