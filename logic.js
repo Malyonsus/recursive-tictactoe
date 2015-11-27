@@ -235,7 +235,12 @@ function make_move( x, y ) {
   assoc_grid_x = x % 3;
   assoc_grid_y = y % 3;
 
-  highlight_grid( assoc_grid_x, assoc_grid_y, "#0f0" );
+  if( xTurn ) {
+    highlight_grid( assoc_grid_x, assoc_grid_y, "#f30" );
+  } else {
+    highlight_grid( assoc_grid_x, assoc_grid_y, "#03f" );
+  }
+
 //  shade_grid( assoc_grid_x, assoc_grid_y, "rgba(0,255,00,0.7)" )
 
   board_state_all[ xy_to_1d(x,y) ] = true;
