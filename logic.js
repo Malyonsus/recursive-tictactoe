@@ -61,7 +61,26 @@ function redraw_board() {
 
 // Redraw the x's, o's, and meta-grid
 function redraw_state() {
+  for(x=0;x<9;x++) {
+    for(y=0;y<9;y++) {
+      if(board_state_x[xy_to_1d(x,y)]) {
+        drawX(x,y);
+      } else if(board_state_o[xy_to_1d(x,y)]) {
+        drawO(x,y);
+      }
+    }
+  }
 
+  if( moves.length > 0) {
+    overlay_x = moves[moves.length-1][0] % 3;
+    overlay_y = moves[moves.length-1][1] % 3;
+
+    if(xTurn) {
+      highlight_grid(overlay_x,overlay_y, '#03f');
+    } else {
+      highlight_grid(overlay_x,overlay_y, '#f30');
+    }
+}
 }
 
 function resize_all() {
