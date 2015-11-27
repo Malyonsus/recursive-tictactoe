@@ -223,22 +223,18 @@ function click_handler( event ) {
 function make_move( x, y ) {
 
   clear_overlay();
+  overlay_grid_x = x % 3;
+  overlay_grid_y = y % 3;
 
+  // Turn-dependent updates
   if( xTurn ) {
     board_state_x[ xy_to_1d(x,y) ] = true;
     drawX( x, y );
+    highlight_grid( overlay_grid_x, overlay_grid_y, "#f30");
   } else {
     board_state_o[ xy_to_1d(x,y) ] = true;
     drawO( x, y );
-  }
-
-  assoc_grid_x = x % 3;
-  assoc_grid_y = y % 3;
-
-  if( xTurn ) {
-    highlight_grid( assoc_grid_x, assoc_grid_y, "#f30" );
-  } else {
-    highlight_grid( assoc_grid_x, assoc_grid_y, "#03f" );
+    highlight_grid( overlay_grid_x, overlay_grid_y, "#03f");
   }
 
 //  shade_grid( assoc_grid_x, assoc_grid_y, "rgba(0,255,00,0.7)" )
