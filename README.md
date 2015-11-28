@@ -1,10 +1,8 @@
 #Recursive TicTacToe
-===================
 
 This is a JavaScript implementation of the recursive tic-tac-toe game that was popular for a while.
 
 ##Rules
-===================
 
 ###Objective
 

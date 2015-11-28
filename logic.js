@@ -80,7 +80,7 @@ function redraw_state() {
     } else {
       highlight_grid(overlay_x,overlay_y, '#f30');
     }
-}
+  }
 }
 
 function resize_all() {
@@ -193,7 +193,7 @@ function draw_board() {
     } else {
       context.lineWidth = small_width;
     }
-    context.moveTo(  x_cuts[i], gutter );
+    context.moveTo( x_cuts[i], gutter );
     context.lineTo( x_cuts[i], height - gutter );
     context.moveTo( gutter, y_cuts[i] );
     context.lineTo( width - gutter, y_cuts[i] );
