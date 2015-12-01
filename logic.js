@@ -235,8 +235,6 @@ function click_handler( event ) {
 
   make_move( x, y );
 
-  // if ai, do here.
-
 }
 
 function make_move( x, y ) {
@@ -545,7 +543,7 @@ function shade_grid( x, y, color ) {
   context.lineWidth = 0;
   context.fillStyle = color;
   context.fillRect( x_cuts[x_cut_lower], y_cuts[y_cut_lower],
-                x_cuts[x_cut_upper] - x_cuts[x_cut_lower], y_cuts[y_cut_upper] - y_cuts[y_cut_lower] );
+                    x_cuts[x_cut_upper] - x_cuts[x_cut_lower], y_cuts[y_cut_upper] - y_cuts[y_cut_lower] );
   context.stroke();
   context.closePath();
 }
