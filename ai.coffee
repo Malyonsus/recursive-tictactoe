@@ -32,7 +32,6 @@ first_unfilled = (subboard_index) ->
 add_move = (x,y) ->
 	subboard_index = get_subboard(x,y)
 	square_index = get_square_on_subboard(x,y)
-	console.log ["Setting", subboard_index, square_index, "to true"]
 	boards[subboard_index][square_index] = true
 	subboard_next.push square_index
 	return
@@ -40,16 +39,9 @@ add_move = (x,y) ->
 # This is the call to get the next move to make
 get_move = () ->
 	subboard = subboard_next[-1..][0]
-	console.log ["I think the board is", subboard]
-	console.log ["The state of that board is", boards[subboard]]
 	selection = first_unfilled(subboard)
-	x = selection % 3
-	y = selection // 3
-	console.log([x,y])
-	# now we need to add the x and y offset of the subboard
-	x = x + 3 * (subboard % 3)
-	y = y + 3 * (subboard // 3)
-	console.log([x,y])
+	x = selection % 3 + 3 * (subboard % 3)
+	y = selection // 3 + 3 * (subboard // 3)
 	add_move(x,y)
 	return [x,y]
 

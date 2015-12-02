@@ -29,10 +29,10 @@ var master_board_all = new Array(9), // true if a square in 'supergrid' complete
 
 var aiWorker = new Worker("ai.js");
 
-aiWorker.onmessage = function(event) {
+function handle_ai_message(event) {
   console.log(event.data);
   make_move(event.data[0], event.data[1]);
-};
+}
 
 // Initialize the whole thing. Reset the logicals, draw the whole board.
 function initialize() {
@@ -57,6 +57,9 @@ function reset_game() {
   master_board_all = new Array(9);
   master_board_x = new Array(9);
   master_board_o = new Array(9);
+  aiWorker.terminate();
+  aiWorker = new Worker("ai.js");
+  aiWorker.onmessage = handle_ai_message;
 }
 
 // Clear the overlays, redraw the board grid.
