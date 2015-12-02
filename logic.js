@@ -27,6 +27,13 @@ var master_board_all = new Array(9), // true if a square in 'supergrid' complete
     master_board_x = new Array(9), // true if x won a 'supergrid'
     master_board_o = new Array(9); // true of o won a 'supergrid'
 
+var aiWorker = new Worker("ai.js");
+
+aiWorker.onmessage = function(event) {
+  console.log(event.data);
+  make_move(event.data[0], event.data[1]);
+};
+
 // Initialize the whole thing. Reset the logicals, draw the whole board.
 function initialize() {
   board_view = document.getElementById("board");
@@ -234,6 +241,8 @@ function click_handler( event ) {
   }
 
   make_move( x, y );
+
+  aiWorker.postMessage([x,y]);
 
 }
 
