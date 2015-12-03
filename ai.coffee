@@ -28,6 +28,9 @@ get_square_on_subboard = (x,y) ->
 first_unfilled = (subboard_index) ->
 	return i for v,i in boards[subboard_index] when v is 0
 
+unfilled_squares = (subboard_index) ->
+	return (i for v,i in boards[subboard_index] when v is 0)
+
 # This is the call to mutate the board from user-space
 add_move = (x,y) ->
 	subboard_index = get_subboard(x,y)
@@ -39,7 +42,13 @@ add_move = (x,y) ->
 # This is the call to get the next move to make
 get_move = () ->
 	subboard = subboard_next[-1..][0]
-	selection = first_unfilled(subboard)
+
+	# selection = first_unfilled(subboard)
+
+	options = unfilled_squares(subboard)
+	console.log options
+	selection = options[Math.random() * options.length // 1]
+
 	x = selection % 3 + 3 * (subboard % 3)
 	y = selection // 3 + 3 * (subboard // 3)
 	add_move(x,y)
