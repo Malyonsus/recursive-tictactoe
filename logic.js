@@ -3,7 +3,8 @@
 // UI Components
 var board_view, // the board with marks
     overlay, // the 'which square to play in'
-    meta; // the 3x3 'supergrid'
+    meta, // the 3x3 'supergrid'
+    canvas_div;
 
 // UI Parameters
 var gutter = 4, // distance from the outer edge of the canvas to the grid lines
@@ -39,6 +40,7 @@ function initialize() {
   board_view = document.getElementById("board");
   overlay = document.getElementById("overlay");
   meta = document.getElementById("meta");
+  canvas_div = document.getElementById("canvases");
 
   window.addEventListener('resize', resize_all, false);
 
@@ -98,6 +100,8 @@ function resize_all() {
   best_width = window.innerWidth;
   size = Math.min(best_height, best_width) - 15;
   console.log(size);
+  canvas_div.style.width = (size + 5) + "px";
+  canvas_div.style.height = size + "px";
   board_view.width = size;
   board_view.height = size;
   overlay.width = size;

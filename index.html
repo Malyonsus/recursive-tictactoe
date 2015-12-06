@@ -7,10 +7,11 @@
 		<meta name="viewport" content="initial-scale=1.0">
 	</head>
 	<body onload="javascript: initialize()">
-		<div style="position: relative">
+		<div id="canvases" style="position: relative; float: left;">
 			<canvas style="position: absolute; left:0; top:0; z-index:0;" width="600" height="600" id="board"></canvas>
 			<canvas style="position: absolute; left:0; top:0; z-index:1;" width="600" height="600" id="meta"></canvas>
 			<canvas style="position: absolute; left:0; top:0; z-index:2;" width="600" height="600" id="overlay" onclick="javascript: click_handler(event)"></canvas>
 		</div>
+		<div>This text exists to indicate how information flows (or not) around the canvases.</div>
 	</body>
 </html>
