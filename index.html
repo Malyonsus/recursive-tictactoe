@@ -3,15 +3,32 @@
 	<head>
 		<title>Recursive Tic-tac-toe</title>
 		<script type="text/javascript" src="logic.js" ></script>
-		<!-- <script type="text/javascript" src="ai.js"></script> -->
+		<style>
+			#info {
+				clear:left;
+			}
+			#canvases {
+				position:relative;
+				float: left;
+			}
+		</style>
 		<meta name="viewport" content="initial-scale=1.0">
 	</head>
 	<body onload="javascript: initialize()">
-		<div id="canvases" style="position: relative; float: left;">
+		<div id="canvases">
 			<canvas style="position: absolute; left:0; top:0; z-index:0;" width="600" height="600" id="board"></canvas>
 			<canvas style="position: absolute; left:0; top:0; z-index:1;" width="600" height="600" id="meta"></canvas>
 			<canvas style="position: absolute; left:0; top:0; z-index:2;" width="600" height="600" id="overlay" onclick="javascript: click_handler(event)"></canvas>
 		</div>
-		<div>This text exists to indicate how information flows (or not) around the canvases.</div>
+		<div id="info">
+			<input type="radio" name="ai-toggle" value="on">1 Player</input>
+			<input type="radio" name="ai-toggle" value="off">2 Player</input>
+			<br>
+			AI:
+			<select>
+				<option value="random">Random</option>
+				<option value="greedy">First Available</option>
+			</select>
+		</div>
 	</body>
 </html>

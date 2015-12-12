@@ -98,7 +98,7 @@ function redraw_state() {
 function resize_all() {
   best_height = window.innerHeight;
   best_width = window.innerWidth;
-  size = Math.min(best_height, best_width) - 15;
+  size = Math.min(best_height, best_width) - 50;
   console.log(size);
   canvas_div.style.width = (size + 5) + "px";
   canvas_div.style.height = size + "px";
