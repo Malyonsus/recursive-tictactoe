@@ -252,7 +252,8 @@ function click_handler( event ) {
 
   make_move( x, y );
 
-  aiWorker.postMessage([x,y]);
+  aiWorker.postMessage({"cmd":"move", "x":x, "y": y});
+  aiWorker.postMessage({"cmd":"go"});
 
 }
 

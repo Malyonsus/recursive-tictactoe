@@ -14,8 +14,10 @@ reset = () ->
 	return
 
 self.onmessage = (event) ->
-	add_move(event.data...)
-	postMessage(get_move())
+	command = event.data.cmd
+	switch command
+		when "move" then add_move(event.data.x, event.data.y)
+		when "go" then postMessage(get_move())
 
 # Given an x,y coordinate in the 81 square space,
 # return the subboard it's on (0 1 2/3 4 5/6 7 8)
