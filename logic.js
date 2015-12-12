@@ -253,7 +253,9 @@ function click_handler( event ) {
   make_move( x, y );
 
   aiWorker.postMessage({"cmd":"move", "x":x, "y": y});
-  aiWorker.postMessage({"cmd":"go"});
+  if(radio_value("ai-toggle") == "on") {
+    aiWorker.postMessage({"cmd":"go"});
+  }
 
 }
 
@@ -585,4 +587,17 @@ function game_over( status ) {
     window.alert("Congrats to O!");
   }
   initialize();
+}
+
+// Seriously DOM?
+function radio_value(group)
+{
+    var elements = document.getElementsByName(group);
+    for (var i = 0, l = elements.length; i < l; i++)
+    {
+        if (elements[i].checked)
+        {
+            return elements[i].value;
+        }
+    }
 }
