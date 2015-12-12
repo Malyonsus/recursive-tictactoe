@@ -254,7 +254,8 @@ function click_handler( event ) {
 
   aiWorker.postMessage({"cmd":"move", "x":x, "y": y});
   if(radio_value("ai-toggle") == "on") {
-    aiWorker.postMessage({"cmd":"go"});
+    ai_selection = document.getElementById("ai-selection").value;
+    aiWorker.postMessage({"cmd":"go", "ai": ai_selection});
   }
 
 }
