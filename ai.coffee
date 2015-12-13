@@ -20,7 +20,7 @@ self.onmessage = (event) ->
 		when "move" then add_move(event.data.x, event.data.y)
 		when "go"
 			ai_name = event.data.ai
-			postMessage(ais[ai_name]())
+			postMessage(ais[ai_name].move())
 
 # Given an x,y coordinate in the 81 square space,
 # return the subboard it's on (0 1 2/3 4 5/6 7 8)
@@ -30,10 +30,10 @@ get_subboard = (x,y) ->
 get_square_on_subboard = (x,y) ->
 	3 * (y % 3) + (x % 3)
 
-first_unfilled = (subboard_index) ->
+ais.first_unfilled = (subboard_index) ->
 	return i for v,i in boards[subboard_index] when v is 0
 
-unfilled_squares = (subboard_index) ->
+ais.unfilled_squares = (subboard_index) ->
 	return (i for v,i in boards[subboard_index] when v is 0)
 
 # This is the call to mutate the board from user-space
@@ -44,13 +44,20 @@ add_move = (x,y) ->
 	subboard_next.push square_index
 	return
 
-# This is the call to get the next move to make
-ais["random"] = () ->
+##
+# The idea of the AI dict is that each namespace can contain
+# local AI functions if necessary without polluting the file-scope namespace.
+# Does that matter? Who knows!
+##
+
+# The random ai simply makes a random move on the currently active subboard.
+ais["random"] = {}
+ais["random"].move = () ->
 	subboard = subboard_next[-1..][0]
 
 	# selection = first_unfilled(subboard)
 
-	options = unfilled_squares(subboard)
+	options = ais.unfilled_squares(subboard)
 	console.log options
 	selection = options[Math.random() * options.length // 1]
 
@@ -59,12 +66,17 @@ ais["random"] = () ->
 	add_move(x,y)
 	return [x,y]
 
-ais["greedy"] = () ->
+# The greedy ai picks the first open square on the currently active subboard.
+ais["greedy"] = {}
+ais["greedy"].move = () ->
 	subboard = subboard_next[-1..][0]
-	selection = first_unfilled(subboard)
+	selection = ais.first_unfilled(subboard)
 	x = selection % 3 + 3 * (subboard % 3)
 	y = selection // 3 + 3 * (subboard // 3)
 	add_move(x,y)
 	return [x,y]
+
+# The focused ai will play the best move for the current active subboard.
+# That is, it 'focuses' on winning subboards.
 
 reset()
