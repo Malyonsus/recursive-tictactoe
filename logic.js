@@ -3,7 +3,8 @@
 // UI Components
 var board_view, // the board with marks
     overlay, // the 'which square to play in'
-    meta; // the 3x3 'supergrid'
+    meta, // the 3x3 'supergrid'
+    canvas_div;
 
 // UI Parameters
 var gutter = 4, // distance from the outer edge of the canvas to the grid lines
@@ -27,11 +28,19 @@ var master_board_all = new Array(9), // true if a square in 'supergrid' complete
     master_board_x = new Array(9), // true if x won a 'supergrid'
     master_board_o = new Array(9); // true of o won a 'supergrid'
 
+var aiWorker = new Worker("ai.js");
+
+function handle_ai_message(event) {
+  console.log(event.data);
+  make_move(event.data[0], event.data[1]);
+}
+
 // Initialize the whole thing. Reset the logicals, draw the whole board.
 function initialize() {
   board_view = document.getElementById("board");
   overlay = document.getElementById("overlay");
   meta = document.getElementById("meta");
+  canvas_div = document.getElementById("canvases");
 
   window.addEventListener('resize', resize_all, false);
 
@@ -50,6 +59,9 @@ function reset_game() {
   master_board_all = new Array(9);
   master_board_x = new Array(9);
   master_board_o = new Array(9);
+  aiWorker.terminate();
+  aiWorker = new Worker("ai.js");
+  aiWorker.onmessage = handle_ai_message;
 }
 
 // Clear the overlays, redraw the board grid.
@@ -61,14 +73,38 @@ function redraw_board() {
 
 // Redraw the x's, o's, and meta-grid
 function redraw_state() {
+  for(x=0;x<9;x++) {
+    for(y=0;y<9;y++) {
+      if(board_state_x[xy_to_1d(x,y)]) {
+        drawX(x,y);
+      } else if(board_state_o[xy_to_1d(x,y)]) {
+        drawO(x,y);
+      }
+    }
+  }
 
+  if( moves.length > 0) {
+    overlay_x = moves[moves.length-1][0] % 3;
+    overlay_y = moves[moves.length-1][1] % 3;
+
+    if(xTurn) {
+      highlight_grid(overlay_x,overlay_y, '#03f');
+    } else {
+      highlight_grid(overlay_x,overlay_y, '#f30');
+    }
+  }
 }
 
 function resize_all() {
   best_height = window.innerHeight;
   best_width = window.innerWidth;
   size = Math.min(best_height, best_width) - 15;
+  if(best_height < best_width) {
+    size -= 35; // space for the controls
+  }
   console.log(size);
+  canvas_div.style.width = (size + 5) + "px";
+  canvas_div.style.height = size + "px";
   board_view.width = size;
   board_view.height = size;
   overlay.width = size;
@@ -174,7 +210,7 @@ function draw_board() {
     } else {
       context.lineWidth = small_width;
     }
-    context.moveTo(  x_cuts[i], gutter );
+    context.moveTo( x_cuts[i], gutter );
     context.lineTo( x_cuts[i], height - gutter );
     context.moveTo( gutter, y_cuts[i] );
     context.lineTo( width - gutter, y_cuts[i] );
@@ -216,29 +252,29 @@ function click_handler( event ) {
 
   make_move( x, y );
 
-  // if ai, do here.
+  aiWorker.postMessage({"cmd":"move", "x":x, "y": y});
+  if(radio_value("ai-toggle") == "on") {
+    ai_selection = document.getElementById("ai-selection").value;
+    aiWorker.postMessage({"cmd":"go", "ai": ai_selection});
+  }
 
 }
 
 function make_move( x, y ) {
 
   clear_overlay();
+  overlay_grid_x = x % 3;
+  overlay_grid_y = y % 3;
 
+  // Turn-dependent updates
   if( xTurn ) {
     board_state_x[ xy_to_1d(x,y) ] = true;
     drawX( x, y );
+    highlight_grid( overlay_grid_x, overlay_grid_y, "#f30");
   } else {
     board_state_o[ xy_to_1d(x,y) ] = true;
     drawO( x, y );
-  }
-
-  assoc_grid_x = x % 3;
-  assoc_grid_y = y % 3;
-
-  if( xTurn ) {
-    highlight_grid( assoc_grid_x, assoc_grid_y, "#f30" );
-  } else {
-    highlight_grid( assoc_grid_x, assoc_grid_y, "#03f" );
+    highlight_grid( overlay_grid_x, overlay_grid_y, "#03f");
   }
 
 //  shade_grid( assoc_grid_x, assoc_grid_y, "rgba(0,255,00,0.7)" )
@@ -530,7 +566,7 @@ function shade_grid( x, y, color ) {
   context.lineWidth = 0;
   context.fillStyle = color;
   context.fillRect( x_cuts[x_cut_lower], y_cuts[y_cut_lower],
-                x_cuts[x_cut_upper] - x_cuts[x_cut_lower], y_cuts[y_cut_upper] - y_cuts[y_cut_lower] );
+                    x_cuts[x_cut_upper] - x_cuts[x_cut_lower], y_cuts[y_cut_upper] - y_cuts[y_cut_lower] );
   context.stroke();
   context.closePath();
 }
@@ -552,4 +588,17 @@ function game_over( status ) {
     window.alert("Congrats to O!");
   }
   initialize();
+}
+
+// Seriously DOM?
+function radio_value(group)
+{
+    var elements = document.getElementsByName(group);
+    for (var i = 0, l = elements.length; i < l; i++)
+    {
+        if (elements[i].checked)
+        {
+            return elements[i].value;
+        }
+    }
 }
