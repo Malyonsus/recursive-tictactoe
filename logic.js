@@ -35,6 +35,12 @@ function handle_ai_message(event) {
   make_move(event.data[0], event.data[1]);
 }
 
+function play_click( event ) {
+  console.log("Click!");
+  ai_selection = document.getElementById("ai-selection").value;
+  aiWorker.postMessage({"cmd":"go", "ai": ai_selection});
+}
+
 // Initialize the whole thing. Reset the logicals, draw the whole board.
 function initialize() {
   board_view = document.getElementById("board");

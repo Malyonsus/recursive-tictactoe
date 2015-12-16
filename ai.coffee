@@ -53,26 +53,31 @@ add_move = (x,y) ->
 # The random ai simply makes a random move on the currently active subboard.
 ais["random"] = {}
 ais["random"].move = () ->
-	subboard = subboard_next[-1..][0]
+	if subboard_next.length >= 1
+		subboard = subboard_next[-1..][0]
+		options = ais.unfilled_squares(subboard)
+		selection = options[Math.random() * options.length // 1]
 
-	# selection = first_unfilled(subboard)
+		x = selection % 3 + 3 * (subboard % 3)
+		y = selection // 3 + 3 * (subboard // 3)
+	else
+		x = Math.random() * 9 // 1
+		y = Math.random() * 9 // 1
 
-	options = ais.unfilled_squares(subboard)
-	console.log options
-	selection = options[Math.random() * options.length // 1]
-
-	x = selection % 3 + 3 * (subboard % 3)
-	y = selection // 3 + 3 * (subboard // 3)
 	add_move(x,y)
 	return [x,y]
 
 # The greedy ai picks the first open square on the currently active subboard.
 ais["greedy"] = {}
 ais["greedy"].move = () ->
-	subboard = subboard_next[-1..][0]
-	selection = ais.first_unfilled(subboard)
-	x = selection % 3 + 3 * (subboard % 3)
-	y = selection // 3 + 3 * (subboard // 3)
+	if subboard_next.length >= 1
+		subboard = subboard_next[-1..][0]
+		selection = ais.first_unfilled(subboard)
+		x = selection % 3 + 3 * (subboard % 3)
+		y = selection // 3 + 3 * (subboard // 3)
+	else
+		x = y = 0 # first available, yeah?
+
 	add_move(x,y)
 	return [x,y]
 
