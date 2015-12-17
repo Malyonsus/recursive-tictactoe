@@ -83,5 +83,12 @@ ais["greedy"].move = () ->
 
 # The focused ai will play the best move for the current active subboard.
 # That is, it 'focuses' on winning subboards.
+ais["focused"] = {}
+ais["focused"].move = () ->
+	if subboard_next.length < 1
+		return [4,4]
+	else
+		return ais["greedy"].move()
+
 
 reset()
