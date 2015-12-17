@@ -3,6 +3,7 @@ primes = [2,3,5,7,9,11,13,17,19,23]
 boards = []
 top_board = []
 subboard_next = []
+turn = 1 # arbitrarily 1 is x, -1 is o
 ais = {}
 
 zero_array = (size) ->
@@ -40,8 +41,9 @@ ais.unfilled_squares = (subboard_index) ->
 add_move = (x,y) ->
 	subboard_index = get_subboard(x,y)
 	square_index = get_square_on_subboard(x,y)
-	boards[subboard_index][square_index] = true
+	boards[subboard_index][square_index] = turn
 	subboard_next.push square_index
+	turn = turn * -1
 	return
 
 ##
