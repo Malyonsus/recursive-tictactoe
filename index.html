@@ -23,12 +23,13 @@
 		</div>
 		<div id="info">
 			<input type="radio" name="ai-toggle" value="on">1 Player</input>
-			<input type="radio" name="ai-toggle" value="off">2 Player</input>
+			<input type="radio" name="ai-toggle" value="off" selected>2 Player</input>
 			<br>
 			AI:
 			<select id="ai-selection">
 				<option value="random">Random</option>
 				<option value="greedy">First Available</option>
+				<option value="focused">Subboard Focused</option>
 			</select>
 			<button id="playbutton" onclick="javascript: play_click(event)">Play</button>
 		</div>

@@ -88,7 +88,7 @@ ais["focused"].move = () ->
 	if subboard_next.length < 1
 		return [4,4]
 	else
-		return ais["greedy"].move()
+		return ais["random"].move()
 
 
 reset()
