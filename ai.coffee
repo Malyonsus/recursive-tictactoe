@@ -134,8 +134,8 @@ ais["focused"].move = () ->
 		if total == -v
 			losses.push( (i for i in indices when subboard[i] is 0)[0] )
 
+	console.log(wins, losses)
 	moves = [wins...,losses...]
-	console.log("Moves:", moves)
 	if moves.length == 0
 		return ais["random"].move()
 	selection = moves[0]
