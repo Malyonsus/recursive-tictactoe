@@ -3,6 +3,7 @@ primes = [2,3,5,7,9,11,13,17,19,23]
 boards = []
 top_board = []
 subboard_next = []
+turn = 1 # arbitrarily 1 is x, -1 is o
 ais = {}
 
 zero_array = (size) ->
@@ -40,8 +41,9 @@ ais.unfilled_squares = (subboard_index) ->
 add_move = (x,y) ->
 	subboard_index = get_subboard(x,y)
 	square_index = get_square_on_subboard(x,y)
-	boards[subboard_index][square_index] = true
+	boards[subboard_index][square_index] = turn
 	subboard_next.push square_index
+	turn = turn * -1
 	return
 
 ##
@@ -83,5 +85,63 @@ ais["greedy"].move = () ->
 
 # The focused ai will play the best move for the current active subboard.
 # That is, it 'focuses' on winning subboards.
+ais["focused"] = {}
+ais["focused"].move = () ->
+	if subboard_next.length < 1
+		return [4,4]
+
+	subboard_index = subboard_next[-1..][0]
+	subboard = boards[subboard_index]
+	v = 2 * turn # number for matching one left
+	wins = []
+	losses = []
+	rows = [
+		subboard[0] + subboard[1] + subboard[2],
+		subboard[3] + subboard[4] + subboard[5],
+		subboard[6] + subboard[7] + subboard[8]
+	]
+	cols = [
+		subboard[0] + subboard[3] + subboard[6],
+		subboard[1] + subboard[4] + subboard[7],
+		subboard[2] + subboard[5] + subboard[8]
+	]
+	diags = [
+		subboard[0] + subboard[4] + subboard[8],
+		subboard[2] + subboard[4] + subboard[6]
+	]
+	for total,i in rows
+		val_array = [subboard[i], subboard[i+1], subboard[i+2]]
+		if total == v
+			wins.push( (3*i+j for a, j in val_array when a is 0)[0] )
+		if total == -v
+			losses.push( (3*i+j for a, j in val_array when a is 0)[0] )
+	for total, i in cols
+		val_array = [subboard[i], subboard[i+3], subboard[i+6]]
+		if total == v
+			wins.push( (3*j+i for a, j in val_array when a is 0)[0] )
+		if total == -v
+			losses.push( (3*j+i for a, j in val_array when a is 0)[0] )
+	if diags[0] == v or diags[0] == -v
+		indices = [0, 4, 8]
+		if total == v
+			wins.push( (i for i in indices when subboard[i] is 0)[0] )
+		if total == -v
+			losses.push( (i for i in indices when subboard[i] is 0)[0] )
+	if diags[1] == v or diags[1] == -v
+		indices = [2,4,6]
+		if total == v
+			wins.push( (i for i in indices when subboard[i] is 0)[0] )
+		if total == -v
+			losses.push( (i for i in indices when subboard[i] is 0)[0] )
+
+	console.log(wins, losses)
+	moves = [wins...,losses...]
+	if moves.length == 0
+		return ais["random"].move()
+	selection = moves[0]
+	x = selection % 3 + 3 * (subboard_index % 3)
+	y = selection // 3 + 3 * (subboard_index // 3)
+	add_move(x,y)
+	return[x,y]
 
 reset()
