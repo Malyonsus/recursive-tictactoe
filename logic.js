@@ -597,8 +597,7 @@ function game_over( status ) {
 }
 
 // Seriously DOM?
-function radio_value(group)
-{
+function radio_value(group) {
     var elements = document.getElementsByName(group);
     for (var i = 0, l = elements.length; i < l; i++)
     {
