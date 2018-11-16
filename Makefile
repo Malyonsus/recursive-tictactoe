@@ -1,8 +1,7 @@
 build:
 	mkdir -p dist
-	coffee -c ai.coffee
-	cp ai.js index.html logic.js dist/
-	rm ai.js
+	coffee -c -o dist/ai.js ai.coffee
+	cp index.html logic.js dist/
 
 clean:
 	rm -rf dist/
