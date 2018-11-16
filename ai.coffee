@@ -55,6 +55,7 @@ add_move = (x,y) ->
 # The random ai simply makes a random move on the currently active subboard.
 ais["random"] = {}
 ais["random"].move = () ->
+	console.log("random ai move")
 	if subboard_next.length >= 1
 		subboard = subboard_next[-1..][0]
 		options = ais.unfilled_squares(subboard)
@@ -72,6 +73,7 @@ ais["random"].move = () ->
 # The greedy ai picks the first open square on the currently active subboard.
 ais["greedy"] = {}
 ais["greedy"].move = () ->
+	console.log("greedy ai move")
 	if subboard_next.length >= 1
 		subboard = subboard_next[-1..][0]
 		selection = ais.first_unfilled(subboard)
@@ -87,10 +89,12 @@ ais["greedy"].move = () ->
 # That is, it 'focuses' on winning subboards.
 ais["focused"] = {}
 ais["focused"].move = () ->
-	if subboard_next.length < 1
-		return [4,4]
-
-	subboard_index = subboard_next[-1..][0]
+	console.log("focused ai move")
+	if subboard_next.length >= 1
+		subboard_index = subboard_next[-1..][0]
+	else
+		subboard_index = 4
+	
 	subboard = boards[subboard_index]
 	v = 2 * turn # number for matching one left
 	wins = []
